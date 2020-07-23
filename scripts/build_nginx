@@ -20,11 +20,27 @@ pcre_tarball_url=https://ftp.pcre.org/pub/pcre/pcre-${PCRE_VERSION}.tar.gz
 headers_more_nginx_module_url=https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz
 uuid4_url=https://github.com/cybozu/nginx-uuid4-module/archive/${UUID4_VERSION}.tar.gz
 zlib_url=http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
+nginx-rtmp-module=https://github.com/arut/nginx-rtmp-module.git
+ngx_devel_kit=https://github.com/vision5/ngx_devel_kit.git
+set-misc-nginx-module=https://github.com/openresty/set-misc-nginx-module.git
+ngx_http_substitutions_filter_module=https://github.com/yaoweibin/ngx_http_substitutions_filter_module.git
 
 temp_dir=$(mktemp -d /tmp/nginx.XXXXXXXXXX)
 
 cd $temp_dir
 echo "Temp dir: $temp_dir"
+
+echo "Cloning nginx-rtmp-module"
+git clone $nginx-rtmp-module
+
+echo "Cloning ngx_devel_kit"
+git clone $ngx_devel_kit
+
+echo "Cloning set-misc-nginx-module"
+git clone $set-misc-nginx-module
+
+echo "Cloning ngx_http_substitutions_filter_module"
+git clone $ngx_http_substitutions_filter_module
 
 echo "Downloading $nginx_tarball_url"
 curl -L $nginx_tarball_url | tar xzv
@@ -51,7 +67,11 @@ echo "Downloading $uuid4_url"
     --with-http_ssl_module \
     --prefix=/tmp/nginx \
     --add-module=${temp_dir}/nginx-${NGINX_VERSION}/headers-more-nginx-module-${HEADERS_MORE_VERSION} \
-    --add-module=${temp_dir}/nginx-${NGINX_VERSION}/nginx-uuid4-module-${UUID4_VERSION}
+    --add-module=${temp_dir}/nginx-${NGINX_VERSION}/nginx-uuid4-module-${UUID4_VERSION} \
+    --add-module=${temp_dir}/nginx-rtmp-module \
+    --add-module=${temp_dir}/ngx_devel_kit \
+    --add-module=${temp_dir}/set-misc-nginx-module \
+    --add-module=${temp_dir}/ngx_http_substitutions_filter_module
   make install
 )
 
@@ -66,7 +86,11 @@ echo "Downloading $uuid4_url"
     --with-http_ssl_module \
     --prefix=/tmp/nginx-debug \
     --add-module=${temp_dir}/nginx-${NGINX_VERSION}/headers-more-nginx-module-${HEADERS_MORE_VERSION} \
-    --add-module=${temp_dir}/nginx-${NGINX_VERSION}/nginx-uuid4-module-${UUID4_VERSION}
+    --add-module=${temp_dir}/nginx-${NGINX_VERSION}/nginx-uuid4-module-${UUID4_VERSION} \
+    --add-module=${temp_dir}/nginx-rtmp-module \
+    --add-module=${temp_dir}/ngx_devel_kit \
+    --add-module=${temp_dir}/set-misc-nginx-module \
+    --add-module=${temp_dir}/ngx_http_substitutions_filter_module
   make install
 )
 
